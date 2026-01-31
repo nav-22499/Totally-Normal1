@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💘</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: radial-gradient(circle, #ffb6c1, #ff4d6d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Comic Sans MS', cursive;
+  }
+
+  .card {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 2;
+  }
+
+  h1 {
+    color: #ff2f68;
+    font-size: 34px;
+  }
+
+  .buttons {
+    margin-top: 30px;
+    height: 150px;
+    position: relative;
+  }
+
+  button {
+    padding: 14px 30px;
+    font-size: 20px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+  }
+
+  #yes {
+    background: #ff2f68;
+    color: white;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 20px #ff2f68;
+  }
+
+  #no {
+    background: #eee;
+    color: #333;
+    transition: left 0.15s linear, top 0.15s linear;
+  }
+
+  .heart {
+    position: fixed;
+    font-size: 24px;
+    animation: floatUp 4s linear forwards;
+    pointer-events: none;
+  }
+
+  @keyframes floatUp {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-600px); opacity: 0; }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+  <h1>Will you be my Valentine? 💖</h1>
+  <p>Try clicking “No”. I dare you 😌</p>
+
+  <div class="buttons">
+    <button id="yes">YES 💘</button>
+    <button id="no">No 😳</button>
+  </div>
+</div>
+
+<script>
+  const noBtn = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
+
+  // Initial position
+  let noX = Math.random() * (window.innerWidth - 120);
+  let noY = Math.random() * (window.innerHeight - 60);
+
+  noBtn.style.left = noX + "px";
+  noBtn.style.top = noY + "px";
+
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+
+  document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  // CONSTANT FLEE LOOP 😈
+  setInterval(() => {
+    const rect = noBtn.getBoundingClientRect();
+    const btnCenterX = rect.left + rect.width / 2;
+    const btnCenterY = rect.top + rect.height / 2;
+
+    let dx = btnCenterX - mouseX;
+    let dy = btnCenterY - mouseY;
+
+    const distance = Math.hypot(dx, dy) || 1;
+
+    // Normalize direction
+    dx /= distance;
+    dy /= distance;
+
+    // SPEED (increase if you want MORE chaos)
+    const speed = 20;
+
+    noX += dx * speed;
+    noY += dy * speed;
+
+    // Bounce off screen edges
+    if (noX < 0) noX = window.innerWidth - 120;
+    if (noX > window.innerWidth - 120) noX = 0;
+    if (noY < 0) noY = window.innerHeight - 60;
+    if (noY > window.innerHeight - 60) noY = 0;
+
+    noBtn.style.left = noX + "px";
+    noBtn.style.top = noY + "px";
+  }, 30); // runs ~33 times per second
+
+  yesBtn.addEventListener("click", () => {
+    document.body.innerHTML = `
+      <div style="
+        height:100vh;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        background:radial-gradient(circle, #ffd1dc, #ff4d6d);
+        font-family:'Comic Sans MS', cursive;
+        text-align:center;">
+        <h1 style="font-size:52px;color:#ff2f68;">YOU WIN 💘😌</h1>
+        <p style="font-size:24px;">The NO button never stood a chance</p>
+      </div>
+    `;
+  });
+</script>
+
+</body>
+</html>
